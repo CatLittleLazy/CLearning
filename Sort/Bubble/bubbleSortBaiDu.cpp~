@@ -1,0 +1,39 @@
+#include <stdio.h>
+#define SIZE 8
+
+void pritNow(int a[]);
+
+void printNow(int a[]){
+	int i;
+	for(i = 0; i < SIZE;i++){
+		printf("%d\t",a[i]);
+	}
+	printf("\n");
+}
+
+void bubble_sort(int a[],int n);
+
+void bubble_sort(int a[],int n){
+	int i,j,temp;
+	for(j=0;j<n-1;j++){
+		for(i=0;i<n-1-j;i++){
+			if(a[i]>a[i+1]){
+				temp = a[i];
+				a[i] = a[i+1];
+				a[i+1] = temp;
+			}
+		}
+		printf("%d:",j);
+		printNow(a);
+	}
+}
+
+int main(void){
+	int number[SIZE] = {
+		95,45,15,78,84,51,24,12
+	};
+	int i;
+	printNow(number);
+	bubble_sort(number,SIZE);
+	return 0;
+}
