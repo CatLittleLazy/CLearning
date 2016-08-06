@@ -3,81 +3,96 @@
 #include "Coordinate.cpp"
 #include <iostream>
 
+#define BINARY 2
+#define OCTONARY 8
+#define HEXADECIML 16
+
 using namespace std;
-MyStack::MyStack(int size){
-	m_iSize = size;
-	m_pBuffer = new Coordinate[size];
-	m_iTop = 0;
-} 
-
-MyStack::~MyStack(){
-	delete []m_pBuffer;
-}
-
-bool MyStack::stackEmpty(){
-	if(0==m_iTop){
-		return true;
-	}else{
-		return false;
-	}
-}
-
-bool MyStack::stackFull(){
-	if(m_iTop==m_iSize){
-		return true;
-	}else{
-		return false;
-	}
-}
-
-void MyStack::clearStack(){
-	m_iTop = 0;
-}
-
-int MyStack::stackLength(){
-	return m_iTop;
-}
-
-bool MyStack::push(Coordinate elem){
-	if(stackFull()){
-		return false;	
-	}
-	m_pBuffer[m_iTop] = elem;
-	m_iTop++;
-	return true;
-}
-
-bool MyStack::pop(Coordinate &elem){
-	if(stackEmpty()){
-		return false;
-	}
-	m_iTop--;
-	elem = m_pBuffer[m_iTop];
-	return true;
-}	
-
-void MyStack::stackTraverse(bool isFormButtom){
-	if(isFormButtom){
-		for(int i = 0; i < m_iTop;i++){
-			//cout<<m_pBuffer[i]<<",";
-			m_pBuffer[i].printCoordinate();
-		}
-	}else{
-		for(int i = m_iTop-1; i >= 0;i--){
-			//cout<<m_pBuffer[i]<<",";
-			m_pBuffer[i].printCoordinate();
-		}
-	}
-}
 
 int main(void){
-	MyStack *pStack = new MyStack(5);
 	
-	pStack->push(Coordinate(1,2));
-	pStack->push(Coordinate(3,4));
+	
+	MyStack<char> *pStack = new MyStack<char>(30);
+	
+	MyStack<char> *pNeedStack = new MyStack<char>(30);
+	
+	char str[] = "[()]]";
+	
+	char currentNeed = 0;
+	
+	for(int i = 0; i < strlen(str);i++){
+		if(str[i]!=currentNeed){
+			pStack->push(str[i]);
+			switch(str[i]){
+				case '[':
+				if(currentNeed!=0){
+					pNeedStack->push(currentNeed);
+				}
+				currentNeed = ']';
+				break;
+				case '(':
+				if(currentNeed!=0){
+					pNeedStack->push(currentNeed);
+				}
+				currentNeed = ')';
+				break;
+				
+				default:
+				cout<<"×Ö·û´®²»Æ¥Åä"<<endl;
+				return 0;
+			}
+		}else{
+			char elem;
+			pStack->pop(elem);
+			if(!pNeedStack->pop(currentNeed)){
+				currentNeed = 0;
+			}
+		}
+	}
+	
+	if(pStack->stackEmpty()){
+		cout<<"×Ö·û´®Æ¥Åä"<<endl;
+	}else{
+		cout<<"×Ö·û´®²»Æ¥Åä"<<endl;
+	}
+	
+	delete pStack;
+	pStack = NULL;
+	
+	delete pNeedStack;
+	pNeedStack = NULL;
+	/*ÊýÖÆ×ª»» 
+char num[] = "0123456789ABCDEF";
+	
+	MyStack<int> *pStack = new MyStack<int>(30);
+	
+	int N = 2016;
+	
+	int mod = 0;
+	
+	while(N != 0){
+		mod = N % OCTONARY;
+		pStack->push(mod);
+		N/=OCTONARY;
+	}
+	
+	//pStack->stackTraverse(false);
+	int elem = 0;
+	while(!pStack->stackEmpty()){
+		pStack->pop(elem);
+		cout<<num[elem];
+	}
+	delete pStack;
+	pStack = NULL;
+*/	
+/*
+	MyStack<char> *pStack = new MyStack<char>(5);
+	
+	pStack->push('h');
+	pStack->push('l');
 
  	pStack->stackTraverse(true);
- 
+  
  	
  
  	//pStack->clearStack();
@@ -96,7 +111,7 @@ int main(void){
 	
 	delete pStack;
 	pStack = NULL;
-	
+*/	
 	system("pause");
 	return 0;
 }
